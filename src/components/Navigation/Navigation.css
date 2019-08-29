@@ -37,17 +37,14 @@
 
 .main-navigation__items li {
     margin: 0 .5rem;
-}
-
-.main-navigation__items a {
     text-decoration: none;
     color: #fff;
     padding: .5rem 1rem;
     border-radius: 5px;
 }
 
-.main-navigation__items a:hover,
-.main-navigation__items a:active,
-.main-navigation__items a.active {
+.main-navigation__items li:hover,
+.main-navigation__items li:active {
     background-color: #012169;
+    cursor: pointer;
 }

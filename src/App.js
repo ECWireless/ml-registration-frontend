@@ -1,60 +1,149 @@
-import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import './App.css';
+import React, { Component } from 'react';
 
 // Pages
 import Navigation from './components/Navigation/Navigation';
 import Home from './pages/Home';
-import RegisterPage from './pages/Register';
-import FormPage from './pages/Form';
-import InfoPage from './pages/Info';
 
-// Context
-import AuthContext from './context/auth-context';
+import './App.css';
 
+
+// const serverUrl = 'http://localhost:8000/';
+const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 
 export default class App extends Component {
 	state = {
+		page: 'login',
+
+		isLoginSwitcher: true,
+		errorMessage: null,
+
+		loggedIn: false,
 		token: null,
-		userId: null
+		userId: null,
 	}
 
-	componentDidUpdate() {
-		localStorage.setItem('myToken', this.state.token);
+    constructor(props) {
+        super(props);
+        this.usernameEl = React.createRef();
+        this.passwordEl = React.createRef();
 	}
 
-	login = (token, userId, tokenExpiration) => {
-		this.setState({ token: token, userId: userId});
-		localStorage.setItem('myToken', this.state.token);
+	componentDidMount() {
+		if (localStorage.getItem('myToken')) {
+			this.setState({token: localStorage.getItem('myToken')})
+		}
 	}
 
-	logout = (token, userId, tokenExpiration) => {
-		this.setState({ token: null, userId: null})
+    switchModeHandler = () => {
+        this.setState(prevState => {
+            return {isLoginSwitcher: !prevState.isLoginSwitcher, errorMessage: null};
+		})
+    }
+
+    login = (event) => {
+        event.preventDefault();
+
+        const username = this.usernameEl.current.value;
+		const password = this.passwordEl.current.value;
+
+        if (username.trim().length === 0 || password.trim().length === 0) {
+			this.setState({
+				...this.state.errorMessage,
+				errorMessage: 'Please submit a valid Username and Password'
+			})
+            return;
+        }
+
+        let requestBody = {
+            query: `
+                query {
+                    login(username: "${username}", password: "${password}") {
+                        userId
+                        token
+                        tokenExpiration
+                    }
+                }
+            `
+        }
+
+        if (!this.state.isLoginSwitcher) {
+            requestBody = {
+                query: `
+                    mutation {
+                        createUser(userInput: {username: "${username}", password: "${password}"}) {
+                            _id
+                            username
+                        }
+                    }
+                `
+            };
+        }
+
+        fetch(serverUrl, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            // if (res.status !== 200 && res.status !== 201) {
+            //     console.log(res)
+            //     throw new Error('Failed!')
+            // }
+            return res.json();
+        })
+        .then(resData => {
+            if (resData.errors) {
+                this.setState({
+                    ...this.state.errorMessage,
+                    errorMessage: resData.errors[0].message
+                })
+            } else if (resData.data.login.token) {
+				localStorage.setItem('myToken', resData.data.login.token);
+				this.setState({token: resData.data.login.token})
+			}
+        })
+        .catch(err => {
+            console.log(err);
+        });
+	};
+	
+	logout = () => {
 		localStorage.removeItem('myToken');
+		this.setState({ token: null })
+		console.log(this.state.token);
 	}
 
 	render() {
 		return (
-			<BrowserRouter>
-				<AuthContext.Provider
-					value={{
-						token: this.state.token,
-						userId: this.state.userId,
-						login: this.login,
-						logout: this.logout
-					}}>
-					<Navigation login={this.login} logout={this.logout} />
-					<main className="main-content">
-						<Switch>
-							<Route path="/register" component={RegisterPage} exact />
-							<Route path="/form" component={FormPage} exact />
-							<Route path="/info" component={InfoPage} exact />
-							<Route path="/" component={Home} exact />
-						</Switch>
-					</main>
-				</AuthContext.Provider>
-			</BrowserRouter>
+			<React.Fragment>
+				<Navigation
+					page={this.state.page}
+					loggedIn={this.state.loggedIn}
+					token={this.state.token}
+					login={this.login}
+					logout={this.logout}
+				/>
+				<main className="main-content">
+					{this.state.page === 'login' && !this.state.token
+					? <Home 
+						isLoginSwitcher={this.state.isLoginSwitcher}
+						errorMessage={this.state.errorMessage}
+						switchModeHandler={this.switchModeHandler}
+						usernameEl={this.usernameEl}
+						passwordEl={this.passwordEl}
+
+						login={this.login}
+					/>
+					: null}
+					{/* <Switch>
+						<Route path="/register" component={RegisterPage} exact />
+						<Route path="/form" component={FormPage} exact />
+						<Route path="/info" component={InfoPage} exact />
+					</Switch> */}
+				</main>
+			</React.Fragment>
 		);
 	}
 }

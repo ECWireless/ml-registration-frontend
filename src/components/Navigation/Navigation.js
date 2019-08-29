@@ -1,32 +1,21 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
-import AuthContext from '../../context/auth-context';
 import './Navigation.css';
 
-const Navigation = props => (
-    <AuthContext.Consumer>
-        {(context) => {
-            return (
-                <header className="main-navigation">
-                    <div className="main-navigation__logo">
-                        <NavLink to="/">
-                            <h1>Merrill Lynch Registration</h1>
-                        </NavLink>
-                    </div>
-                    <nav className="main-navigation__items">
-                        <ul>
-                            {localStorage.getItem('myToken') && <li><NavLink to="/register">Registration</NavLink></li>}
-                            {localStorage.getItem('myToken') && <li><NavLink to="/form">Form</NavLink></li>}
-                            {!localStorage.getItem('myToken') 
-                            ? <li onClick={props.login}><NavLink to="/" exact>Login</NavLink></li>
-                            : <li onClick={props.logout}><NavLink to="/" exact>Logout</NavLink></li>}
-                        </ul>
-                    </nav>
-                </header>
-            )
-        }}   
-    </AuthContext.Consumer>
-)
-
-export default Navigation;
+export default function Navigation(props) {
+    return (
+        <React.Fragment>
+            <header className="main-navigation">
+                <div className="main-navigation__logo">
+                        <h1>Merrill Lynch Registration</h1>
+                </div>
+                <nav className="main-navigation__items">
+                    <ul>
+                        {!props.token ? <li onClick={props.login}>Login</li> : null}
+                        {props.token ? <li onClick={props.logout}>Logout</li> : null}
+                    </ul>
+                </nav>
+            </header>
+        </React.Fragment>
+    )
+}

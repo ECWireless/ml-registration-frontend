@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import './Auth.css';
+import './Home.css';
+import AuthContext from '../context/auth-context';
 
 // const serverUrl = 'http://localhost:8000/';
 const serverUrl = 'https://ml-registration-server.herokuapp.com/';
@@ -8,7 +9,10 @@ const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 export default class Auth extends Component {
     state = {
         isLogin: true,
-    }
+        createUserMessage: null,
+    };
+
+    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -65,13 +69,23 @@ export default class Auth extends Component {
             }
         })
         .then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!')
-            }
+            // if (res.status !== 200 && res.status !== 201) {
+            //     console.log(res)
+            //     throw new Error('Failed!')
+            // }
             return res.json();
         })
         .then(resData => {
-            console.log(resData);
+            if (resData.errors) {
+                this.setState({
+                    ...this.state.createUserMessage,
+                    createUserMessage: resData.errors[0].message
+                })
+            } else if (resData.data.login.token) {
+                this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
+
+                localStorage.setItem('myToken', resData.data.login.token);
+            }
         })
         .catch(err => {
             console.log(err);
@@ -102,8 +116,8 @@ export default class Auth extends Component {
                         <button type="submit">Create</button>
                         <button type="button" onClick={this.switchModeHandler}>Switch to Login</button>
                     </React.Fragment>}
-                    
                 </div>
+                <p className="form-warning">{this.state.createUserMessage}</p>
             </form>
         )
     }

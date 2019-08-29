@@ -10,6 +10,10 @@
     align-items: center;
 }
 
+.main-navigation__logo a {
+    text-decoration: none;
+}
+
 .main-navigation__logo h1 {
     margin: 0;
     font-size: 1rem;

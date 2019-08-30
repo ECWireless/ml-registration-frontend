@@ -5,21 +5,20 @@ import './Login.css';
 
 export default class Home extends Component {
     render() {
-        console.log(this.props.success)
         return (
             <form className="auth-form" onSubmit={this.props.login}>
-                <h1 className="form-header">
+                <h1 className="login-header">
                     {this.props.isLoginSwitcher ? 'Login' : 'Create Account'} to Register
                 </h1>
-                <div className="form-control">
+                <div className="login-control">
                     <label htmlFor="username">Username</label>
                     <input type="text" id="username" ref={this.props.usernameEl} />
                 </div>
-                <div className="form-control">
+                <div className="login-control">
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" ref={this.props.passwordEl} />
                 </div>
-                <div className="form-actions">
+                <div className="login-actions">
                     {this.props.isLoginSwitcher
                     ?<React.Fragment>
                         <button className="button-switch" type="button" onClick={this.props.switchModeHandler}>Create New Account</button>
@@ -38,7 +37,7 @@ export default class Home extends Component {
                     </button>
 
                 </div>
-                <p className={this.props.success ? "form-warning-succes" : "form-warning"}>{this.props.errorMessage}</p>
+                <p className={this.props.success ? "login-warning-succes" : "login-warning"}>{this.props.errorMessage}</p>
             </form>
         )
     }

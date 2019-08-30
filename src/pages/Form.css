@@ -1,0 +1,8 @@
+.form-control {
+    text-align: center;
+    border: 1px solid #009cde;
+    padding: 1rem;
+    margin: 2rem auto;
+    width: 30rem;
+    max-width: 80%;
+}

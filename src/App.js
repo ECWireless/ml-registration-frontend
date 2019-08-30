@@ -5,7 +5,6 @@ import Navigation from './components/Navigation/Navigation';
 import LoginPage from './pages/Login';
 import AdminLoginPage from './pages/AdminLogin';
 import FormPage from './pages/Form';
-
 import './App.css';
 
 
@@ -33,7 +32,7 @@ export default class App extends Component {
 
 	componentDidMount() {
 		if (localStorage.getItem('myToken')) {
-			this.setState({ token: localStorage.getItem('myToken')})
+			this.setState({ token: localStorage.getItem('myToken'), page: 'form'})
 		}
 	}
 
@@ -42,6 +41,8 @@ export default class App extends Component {
 			this.setState(prevState => {
 				return {isLoginSwitcher: !prevState.isLoginSwitcher };
 			})
+		} else if (status === 'login') {
+			this.setState({page: 'login'})
 		} else {
 			this.setState(prevState => {
 				return {isLoginSwitcher: !prevState.isLoginSwitcher, errorMessage: null, success: false};
@@ -225,10 +226,11 @@ export default class App extends Component {
 
 							// Actions
 							adminLogin={this.adminLogin}
+							switchModeHandler={this.switchModeHandler.bind(this, 'login')}
 						/> 
 						:null
 					}
-					{this.state.page === 'form' && this.state.token ? <FormPage /> : null}
+					{this.state.page === 'form' && this.state.token ? <FormPage token={this.state.token} /> : null}
 				</main>
 			</React.Fragment>
 		);

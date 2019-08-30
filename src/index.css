@@ -12,8 +12,18 @@ body {
     text-align: center;
     padding-bottom: 1rem;
     border-bottom: 2px solid #009cde;
-    margin: 1rem auto 4rem;
+    margin: 6rem auto 4rem;
     width: 20rem;
+}
+
+.main-header-small {
+    color: #2d2d2d;
+    font-size: 1.8rem;
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #009cde;
+    margin: 6rem auto 4rem;
+    width: 30rem;
 }
 
 .main-control label,

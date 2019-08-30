@@ -7,6 +7,9 @@ import AdminLoginPage from './pages/AdminLogin';
 import FormPage from './pages/Form';
 import './App.css';
 
+// Components
+import Info from './components/Info/Info';
+
 
 // const serverUrl = 'http://localhost:8000/';
 const serverUrl = 'https://ml-registration-server.herokuapp.com/';
@@ -255,6 +258,12 @@ export default class App extends Component {
                             username={this.state.username}
                         />
                     ) : null}
+                    <div className="form-header-container">
+                        <h1 className="main-header-small">
+                            Information about the Shoot
+                        </h1>
+                    </div>
+                    <Info />
 				</main>
 			</React.Fragment>
 		);

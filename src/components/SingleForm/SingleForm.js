@@ -6,7 +6,7 @@ export default function Form(props) {
     return (
         <React.Fragment>
             <div className="form-header-container">
-                <h1 className="login-header">
+                <h1 className="main-header">
                     {props.username}'s Registration
                 </h1>
             </div>

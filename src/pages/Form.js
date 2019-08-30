@@ -39,10 +39,14 @@ export default class Form extends Component {
         const requestBody = {
             query: `
                 mutation {
-                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}"}) {
+                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}", creator: "${this.props.userId}"}) {
                         name
                         phoneNumber
                         email
+                        creator {
+                            _id
+                            username
+                        }
                     }
                 }
             `

@@ -121,7 +121,11 @@ export default class App extends Component {
                 })
             } else if (resData.data.login) {
 				localStorage.setItem('myToken', resData.data.login.token);
-				this.setState({ token: resData.data.login.token, loggedIn: true, page: 'form' })
+				this.setState({
+                    token: resData.data.login.token,
+                    loggedIn: true, page: 'form',
+                    userId: resData.data.login.userId,
+                })
 			} else if (resData.data.createUser.username === username) {
 				this.setState({ success: true, errorMessage: 'You have created a new account! Click "Login".' })
 				this.switchModeHandler('new');
@@ -176,7 +180,10 @@ export default class App extends Component {
                 })
             } else if (resData.data.login) {
 				localStorage.setItem('myToken', resData.data.login.token);
-				this.setState({ token: resData.data.login.token, loggedIn: true, page: 'form' })
+				this.setState({
+                    token: resData.data.login.token,
+                    loggedIn: true, page: 'form'
+                })
 			}
         })
         .catch(err => {
@@ -186,7 +193,7 @@ export default class App extends Component {
 	
 	logout = () => {
 		localStorage.removeItem('myToken');
-		this.setState({ token: null, errorMessage: null, success: false, page: 'login' });
+        this.setState({ token: null, errorMessage: null, success: false, page: 'login' });
 	}
 
 	render() {
@@ -230,7 +237,12 @@ export default class App extends Component {
 						/> 
 						:null
 					}
-					{this.state.page === 'form' && this.state.token ? <FormPage token={this.state.token} /> : null}
+					{this.state.page === 'form' && this.state.token ? (
+                        <FormPage
+                            token={this.state.token}
+                            userId={this.state.userId}
+                        />
+                    ) : null}
 				</main>
 			</React.Fragment>
 		);

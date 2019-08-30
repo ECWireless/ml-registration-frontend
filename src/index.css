@@ -6,26 +6,27 @@ body {
 
 
 
-.login-header {
+.main-header {
     color: #2d2d2d;
     font-size: 1.8rem;
     text-align: center;
-    padding-bottom: .6rem;
+    padding-bottom: 1rem;
     border-bottom: 2px solid #009cde;
-    margin-bottom: 4rem;
+    margin: 1rem auto 4rem;
+    width: 20rem;
 }
 
-.login-control label,
-.login-control input {
+.main-control label,
+.main-control input {
     width: 100%;
     display: block;
 }
 
-.login-control label {
+.main-control label {
     margin-bottom:  0.5rem;
 }
 
-.login-control {
+.main-control {
     margin-bottom: 1rem;
 }
 

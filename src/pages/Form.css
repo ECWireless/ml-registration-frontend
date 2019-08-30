@@ -20,17 +20,3 @@
     border-bottom: 2px solid #009cde;
     margin-bottom: 4rem;
 }
-
-.form__list {
-    margin-top: 2rem;
-    max-width: 60%;
-    margin: 2rem auto;
-    list-style: none;
-    padding: 0;
-}
-
-.form__list-item {
-    margin: 1rem 0;
-    padding: 1rem;;
-    border: 1px solid #009cde;
-}

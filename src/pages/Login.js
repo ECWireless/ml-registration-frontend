@@ -7,18 +7,19 @@ export default class Home extends Component {
     render() {
         return (
             <form className="auth-form" onSubmit={this.props.login}>
-                <h1 className="login-header">
+                <h1 className="main-header">
                     {this.props.isLoginSwitcher ? 'Login' : 'Create Account'} to Register
                 </h1>
-                <div className="login-control">
+                <div className="main-control">
                     <label htmlFor="username">Username</label>
                     <input type="text" id="username" ref={this.props.usernameEl} />
                 </div>
-                <div className="login-control">
+                <div className="main-control">
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" ref={this.props.passwordEl} />
                 </div>
-                <div className="login-actions">
+                <br/>
+                <div className="main-actions">
                     {this.props.isLoginSwitcher
                     ?<React.Fragment>
                         <button className="button-switch" type="button" onClick={this.props.switchModeHandler}>Create New Account</button>

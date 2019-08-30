@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // Components
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
+import SingleForm from '../components/SingleForm/SingleForm';
 
 import './Form.css';
 
@@ -160,20 +161,12 @@ export default class Form extends Component {
 
     render() {
         let content = (
-            <React.Fragment>
-                <div className="form-header-container">
-                    <h1 className="login-header">
-                        {this.state.username}'s Form
-                    </h1>
-                </div>
-                <ul className="form__list">
-                    <li className="form__list-item">
-                        <p>Name: {this.state.name}</p> 
-                        <p>Phone Number: {this.state.phoneNumber}</p> 
-                        <p>Email: {this.state.email}</p> 
-                    </li>
-                </ul>
-            </React.Fragment>
+            <SingleForm
+                username={this.state.username}
+                name={this.state.name}
+                phoneNumber={this.state.phoneNumber}
+                email={this.state.email}
+            />
         )
 
         if (this.state.canCreate) {

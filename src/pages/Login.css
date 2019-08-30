@@ -27,7 +27,7 @@
     margin-bottom: 1rem;
 }
 
-.form-actions button {
+.button-main {
     background: #009cde;
     font: inherit;
     border: 1px solid #009cde;
@@ -41,18 +41,67 @@
     transition: all .2s ease;
 }
 
-.form-actions button:hover {
+.button-switch {
+    background: #fff;
+    font: inherit;
+    border: 1px solid #009cde;
+    border-radius: 5px;
+    padding: 0.25rem 1rem;
+    margin-right: 1rem;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    outline: none;
+    cursor: pointer;
+    color: #009cde;
+    transition: all .2s ease;
+}
+
+.button-main:hover {
     transform: scale(1.02);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
     background: #012169;
     border: 1px solid #012169;
 }
 
-.form-actions button:active {
+.button-main:active {
     transform: scale(.99);
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     background: #012169;
     border: 1px solid #012169;
+}
+
+.button-switch:hover {
+    transform: scale(1.02);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    background: #012169;
+    border: 1px solid #012169;
+    color: #fff;
+}
+
+.button-switch:active {
+    transform: scale(.99);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background: #012169;
+    border: 1px solid #012169;
+    color: #fff;
+}
+
+.button-admin {
+    background: #fff;
+    margin-top: 1rem;
+    border: none;
+    border-bottom: 1px solid #009cde;
+    color: #009cde;
+    outline: none;
+}
+
+.button-admin:hover {
+    color: #012169;
+    cursor: pointer;
+    border-bottom: 2px solid #012169;
+}
+
+.form-warning-succes {
+    color: green;
 }
 
 .form-warning {

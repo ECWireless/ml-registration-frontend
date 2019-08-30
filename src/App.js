@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 // Pages
 import Navigation from './components/Navigation/Navigation';
-import Home from './pages/Home';
+import LoginPage from './pages/Login';
+import AdminLoginPage from './pages/AdminLogin';
+import FormPage from './pages/Form';
 
 import './App.css';
 
@@ -16,6 +18,7 @@ export default class App extends Component {
 
 		isLoginSwitcher: true,
 		errorMessage: null,
+		success: false,
 
 		loggedIn: false,
 		token: null,
@@ -30,15 +33,25 @@ export default class App extends Component {
 
 	componentDidMount() {
 		if (localStorage.getItem('myToken')) {
-			this.setState({token: localStorage.getItem('myToken')})
+			this.setState({ token: localStorage.getItem('myToken')})
 		}
 	}
 
-    switchModeHandler = () => {
-        this.setState(prevState => {
-            return {isLoginSwitcher: !prevState.isLoginSwitcher, errorMessage: null};
-		})
-    }
+    switchModeHandler = (status) => {
+		if (status === 'new') {
+			this.setState(prevState => {
+				return {isLoginSwitcher: !prevState.isLoginSwitcher };
+			})
+		} else {
+			this.setState(prevState => {
+				return {isLoginSwitcher: !prevState.isLoginSwitcher, errorMessage: null, success: false};
+			})
+		}
+	}
+	
+	adminSwitch = () => {
+		this.setState({page: 'admin'})
+	}
 
     login = (event) => {
         event.preventDefault();
@@ -49,10 +62,16 @@ export default class App extends Component {
         if (username.trim().length === 0 || password.trim().length === 0) {
 			this.setState({
 				...this.state.errorMessage,
-				errorMessage: 'Please submit a valid Username and Password'
+				errorMessage: 'Please submit a valid Username and Password.'
 			})
             return;
-        }
+		} else if (username === 'Admin') {
+			this.setState({
+				...this.state.errorMessage,
+				errorMessage: 'Switch to Admin Login.'
+			})
+			return;
+		}
 
         let requestBody = {
             query: `
@@ -99,9 +118,64 @@ export default class App extends Component {
                     ...this.state.errorMessage,
                     errorMessage: resData.errors[0].message
                 })
-            } else if (resData.data.login.token) {
+            } else if (resData.data.login) {
 				localStorage.setItem('myToken', resData.data.login.token);
-				this.setState({token: resData.data.login.token})
+				this.setState({ token: resData.data.login.token, loggedIn: true, page: 'form' })
+			} else if (resData.data.createUser.username === username) {
+				this.setState({ success: true, errorMessage: 'You have created a new account! Click "Login".' })
+				this.switchModeHandler('new');
+			}
+        })
+        .catch(err => {
+            console.log(err);
+        });
+	};
+
+	adminLogin = (event) => {
+        event.preventDefault();
+
+        const username = this.usernameEl.current.value;
+		const password = this.passwordEl.current.value;
+
+        if (username.trim().length === 0 || password.trim().length === 0) {
+			this.setState({
+				...this.state.errorMessage,
+				errorMessage: 'Please submit a valid Username and Password.'
+			})
+            return;
+		}
+
+        let requestBody = {
+            query: `
+                query {
+                    login(username: "${username}", password: "${password}") {
+                        userId
+                        token
+                        tokenExpiration
+                    }
+                }
+            `
+        }
+
+        fetch(serverUrl, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(resData => {
+            if (resData.errors) {
+                this.setState({
+                    ...this.state.errorMessage,
+                    errorMessage: resData.errors[0].message
+                })
+            } else if (resData.data.login) {
+				localStorage.setItem('myToken', resData.data.login.token);
+				this.setState({ token: resData.data.login.token, loggedIn: true, page: 'form' })
 			}
         })
         .catch(err => {
@@ -111,8 +185,7 @@ export default class App extends Component {
 	
 	logout = () => {
 		localStorage.removeItem('myToken');
-		this.setState({ token: null })
-		console.log(this.state.token);
+		this.setState({ token: null, errorMessage: null, success: false, page: 'login' });
 	}
 
 	render() {
@@ -122,26 +195,40 @@ export default class App extends Component {
 					page={this.state.page}
 					loggedIn={this.state.loggedIn}
 					token={this.state.token}
+
+					// Actions
 					login={this.login}
 					logout={this.logout}
 				/>
 				<main className="main-content">
 					{this.state.page === 'login' && !this.state.token
-					? <Home 
+					? <LoginPage
+						// State
 						isLoginSwitcher={this.state.isLoginSwitcher}
 						errorMessage={this.state.errorMessage}
-						switchModeHandler={this.switchModeHandler}
 						usernameEl={this.usernameEl}
 						passwordEl={this.passwordEl}
+						success={this.state.success}
+						adminSwitch={this.adminSwitch}
 
+						// Actions
+						switchModeHandler={this.switchModeHandler}
 						login={this.login}
 					/>
 					: null}
-					{/* <Switch>
-						<Route path="/register" component={RegisterPage} exact />
-						<Route path="/form" component={FormPage} exact />
-						<Route path="/info" component={InfoPage} exact />
-					</Switch> */}
+					{this.state.page === 'admin' && !this.state.token 
+						? <AdminLoginPage
+							// State
+							errorMessage={this.state.errorMessage}
+							usernameEl={this.usernameEl}
+							passwordEl={this.passwordEl}
+
+							// Actions
+							adminLogin={this.adminLogin}
+						/> 
+						:null
+					}
+					{this.state.page === 'form' && this.state.token ? <FormPage /> : null}
 				</main>
 			</React.Fragment>
 		);

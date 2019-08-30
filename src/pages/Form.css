@@ -7,9 +7,23 @@
     max-width: 80%;
 }
 
+.form-header-container {
+    width: 30rem;
+    margin: 0 auto;
+}
+
+.form-header {
+    color: #2d2d2d;
+    font-size: 1.8rem;
+    text-align: center;
+    padding-bottom: .6rem;
+    border-bottom: 2px solid #009cde;
+    margin-bottom: 4rem;
+}
+
 .form__list {
     margin-top: 2rem;
-    max-width: 90%;
+    max-width: 60%;
     margin: 2rem auto;
     list-style: none;
     padding: 0;

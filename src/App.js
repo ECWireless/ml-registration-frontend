@@ -21,7 +21,7 @@ export default class App extends Component {
 
 		loggedIn: false,
 		token: null,
-		userId: null,
+        userId: null,
 	}
 
     constructor(props) {
@@ -32,7 +32,10 @@ export default class App extends Component {
 
 	componentDidMount() {
 		if (localStorage.getItem('myToken')) {
-			this.setState({ token: localStorage.getItem('myToken'), page: 'form'})
+			this.setState({
+                token: localStorage.getItem('myToken'),
+                page: 'form',
+            })
 		}
 	}
 
@@ -120,7 +123,8 @@ export default class App extends Component {
                     errorMessage: resData.errors[0].message
                 })
             } else if (resData.data.login) {
-				localStorage.setItem('myToken', resData.data.login.token);
+                localStorage.setItem('myToken', resData.data.login.token);
+                localStorage.setItem('userId', resData.data.login.userId);
 				this.setState({
                     token: resData.data.login.token,
                     loggedIn: true, page: 'form',
@@ -182,7 +186,7 @@ export default class App extends Component {
 				localStorage.setItem('myToken', resData.data.login.token);
 				this.setState({
                     token: resData.data.login.token,
-                    loggedIn: true, page: 'form'
+                    loggedIn: true, page: 'form',
                 })
 			}
         })
@@ -192,8 +196,15 @@ export default class App extends Component {
 	};
 	
 	logout = () => {
-		localStorage.removeItem('myToken');
-        this.setState({ token: null, errorMessage: null, success: false, page: 'login' });
+        localStorage.removeItem('myToken');
+        localStorage.removeItem('userId');
+        this.setState({
+            token: null,
+            errorMessage: null,
+            success: false,
+            page: 'login',
+            username: null,
+        });
 	}
 
 	render() {
@@ -241,6 +252,7 @@ export default class App extends Component {
                         <FormPage
                             token={this.state.token}
                             userId={this.state.userId}
+                            username={this.state.username}
                         />
                     ) : null}
 				</main>

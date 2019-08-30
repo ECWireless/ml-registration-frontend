@@ -28,6 +28,7 @@ export default class Home extends Component {
                         <button className="button-switch" type="button" onClick={this.props.switchModeHandler}>Switch to Login</button>
                         <button className="button-main" type="submit">Create</button>
                     </React.Fragment>}
+                    <br/>
                     <button
                         className="button-admin"
                         type="button"

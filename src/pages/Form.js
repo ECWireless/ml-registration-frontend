@@ -12,8 +12,15 @@ const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 export default class Form extends Component {
     state = {
         creating: false,
-        form: null,
+
         canCreate: false,
+        userId: null,
+        userForm: null,
+
+        username: '',
+        name: '',
+        phoneNumber: '',
+        email: '',
     }
 
     constructor(props) {
@@ -25,6 +32,7 @@ export default class Form extends Component {
 
     componentDidMount() {
         this.fetchForms();
+        this.setState({userId: localStorage.getItem('userId')})
     }
 
     createFormHandler = () => {
@@ -116,12 +124,32 @@ export default class Form extends Component {
             return res.json();
         })
         .then(resData => {
-            const form = resData.data.forms[0];
+            const forms = resData.data.forms;
+            let userForm = []
 
-            if (form) {
-                this.setState({ form: form, canCreate: false });
+            function filterForms(arr, arr2) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].creator._id === arr2) {
+                        userForm.push(arr[i]);
+                    }
+                }
+            }
+                
+            filterForms(forms, this.state.userId);
+
+            if (userForm.length !== 0) {
+                this.setState({
+                    userForm: userForm,
+                    canCreate: false,
+                    username: userForm[0].creator.username,
+                    name: userForm[0].name,
+                    phoneNumber: userForm[0].phoneNumber,
+                    email: userForm[0].email
+                });
             } else {
-                this.setState({ form: null, canCreate: true });
+                this.setState({
+                    canCreate: true,
+                });
             }
             
         })
@@ -131,10 +159,26 @@ export default class Form extends Component {
     }
 
     render() {
-        return (
+        let content = (
             <React.Fragment>
-                {this.state.canCreate
-                ? <div>
+                <div className="form-header-container">
+                    <h1 className="login-header">
+                        {this.state.username}'s Form
+                    </h1>
+                </div>
+                <ul className="form__list">
+                    <li className="form__list-item">
+                        <p>Name: {this.state.name}</p> 
+                        <p>Phone Number: {this.state.phoneNumber}</p> 
+                        <p>Email: {this.state.email}</p> 
+                    </li>
+                </ul>
+            </React.Fragment>
+        )
+
+        if (this.state.canCreate) {
+            content = (
+                <React.Fragment>
                     {this.state.creating && <div onClick={this.modalCancelHandler}><Backdrop /></div>}
                     {this.state.creating && (
                         <Modal 
@@ -163,17 +207,10 @@ export default class Form extends Component {
                         <p>Please fill out the form to complete registration.</p>
                         <button className="btn" onClick={this.createFormHandler}>Begin Registration</button>
                     </div>
-                </div>
-                : <div>
-                    {this.state.form && <ul className="form__list">
-                        <li className="form__list-item">
-                            <p>Name: {this.state.form.name}</p> 
-                            <p>Phone Number: {this.state.form.phoneNumber}</p> 
-                            <p>Email: {this.state.form.email}</p> 
-                        </li>
-                    </ul>}
-                </div>}
-            </React.Fragment>
-        )
+                </React.Fragment>
+            )
+        }
+
+        return content
     }
 }

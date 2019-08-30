@@ -6,12 +6,14 @@ import Backdrop from '../components/Backdrop/Backdrop';
 
 import './Form.css';
 
-const serverUrl = 'http://localhost:8000/';
-// const serverUrl = 'https://ml-registration-server.herokuapp.com/';
+// const serverUrl = 'http://localhost:8000/';
+const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 
 export default class Form extends Component {
     state = {
         creating: false,
+        form: null,
+        canCreate: false,
     }
 
     constructor(props) {
@@ -19,6 +21,10 @@ export default class Form extends Component {
         this.nameElRef = React.createRef();
         this.phoneNumberElRef = React.createRef();
         this.emailElRef = React.createRef();
+    }
+
+    componentDidMount() {
+        this.fetchForms();
     }
 
     createFormHandler = () => {
@@ -63,11 +69,11 @@ export default class Form extends Component {
             }
         })
         .then(res => {
-            console.log(res)
             return res.json();
         })
         .then(resData => {
-            console.log(resData);
+            console.log(resData)
+            this.fetchForms();
         })
         .catch(err => {
             console.log(err);
@@ -78,37 +84,95 @@ export default class Form extends Component {
         this.setState({creating: false})
     }
 
+    fetchForms = () => {
+        const requestBody = {
+            query: `
+                query {
+                    forms {
+                        _id
+                        name
+                        phoneNumber
+                        email
+                        creator {
+                            _id
+                            username
+                        }
+                    }
+                }
+            `
+        }
+
+        const token = this.props.token;
+
+        fetch(serverUrl, {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(resData => {
+            const form = resData.data.forms[0];
+
+            if (form) {
+                this.setState({ form: form, canCreate: false });
+            } else {
+                this.setState({ form: null, canCreate: true });
+            }
+            
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                {this.state.creating && <div onClick={this.modalCancelHandler}><Backdrop /></div>}
-                {this.state.creating && (
-                    <Modal 
-                        title="Registration Form"
-                        canCancel canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.modalConfirmHandler}
-                    >
-                        <form>
-                            <div className="login-control">
-                                <label htmlFor="name">Name</label>
-                                <input type="text" id="name" ref={this.nameElRef} />
-                            </div>
-                            <div className="login-control">
-                                <label htmlFor="phoneNumber">Phone Number</label>
-                                <input type="tel" id="phoneNumber" ref={this.phoneNumberElRef} />
-                            </div>
-                            <div className="login-control">
-                                <label htmlFor="email">Email</label>
-                                <input type="email" id="email" ref={this.emailElRef} />
-                            </div>
-                        </form>
-                    </Modal>
-                )}
-                <div className="form-control">
-                    <p>Please fill out the form to complete registration.</p>
-                    <button className="btn" onClick={this.createFormHandler}>Begin Registration</button>
+                {this.state.canCreate
+                ? <div>
+                    {this.state.creating && <div onClick={this.modalCancelHandler}><Backdrop /></div>}
+                    {this.state.creating && (
+                        <Modal 
+                            title="Registration Form"
+                            canCancel canConfirm
+                            onCancel={this.modalCancelHandler}
+                            onConfirm={this.modalConfirmHandler}
+                        >
+                            <form>
+                                <div className="login-control">
+                                    <label htmlFor="name">Name</label>
+                                    <input type="text" id="name" ref={this.nameElRef} />
+                                </div>
+                                <div className="login-control">
+                                    <label htmlFor="phoneNumber">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" ref={this.phoneNumberElRef} />
+                                </div>
+                                <div className="login-control">
+                                    <label htmlFor="email">Email</label>
+                                    <input type="email" id="email" ref={this.emailElRef} />
+                                </div>
+                            </form>
+                        </Modal>
+                    )}
+                    <div className="form-control">
+                        <p>Please fill out the form to complete registration.</p>
+                        <button className="btn" onClick={this.createFormHandler}>Begin Registration</button>
+                    </div>
                 </div>
+                : <div>
+                    {this.state.form && <ul className="form__list">
+                        <li className="form__list-item">
+                            <p>Name: {this.state.form.name}</p> 
+                            <p>Phone Number: {this.state.form.phoneNumber}</p> 
+                            <p>Email: {this.state.form.email}</p> 
+                        </li>
+                    </ul>}
+                </div>}
             </React.Fragment>
         )
     }

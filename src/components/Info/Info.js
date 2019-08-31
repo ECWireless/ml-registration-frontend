@@ -5,6 +5,11 @@ import './Info.css';
 export default function Info() {
     return (
         <React.Fragment>
+            <div className="form-header-container">
+                <h1 className="main-header-small">
+                    Information about the Shoot
+                </h1>
+            </div>
             <div className="info__container">
                 <h2 className="info__section-header">
                     Before you arrive:

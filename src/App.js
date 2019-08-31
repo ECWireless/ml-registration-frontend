@@ -10,13 +10,18 @@ import './App.css';
 // Components
 import Info from './components/Info/Info';
 
-
 // const serverUrl = 'http://localhost:8000/';
 const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 
+const codes = [
+    "P4Mth'25rQyB",
+    "ogGM_pzr3ybW",
+    "Gd+CsYxn8_PE"
+];
+
 export default class App extends Component {
 	state = {
-		page: 'login',
+		page: 'home',
 
 		isLoginSwitcher: true,
 		errorMessage: null,
@@ -25,6 +30,7 @@ export default class App extends Component {
 		loggedIn: false,
 		token: null,
         userId: null,
+        username: '',
 	}
 
     constructor(props) {
@@ -38,9 +44,22 @@ export default class App extends Component {
 			this.setState({
                 token: localStorage.getItem('myToken'),
                 page: 'form',
+                loggedIn: true,
             })
 		}
-	}
+    }
+
+    onHomeHandler = () => {
+        if (this.state.loggedIn) {
+            return;
+        } else {
+            this.setState({ page: 'home'})
+        }
+    }
+    
+    onBeginHandler = () => {
+        this.setState({ page: 'login'})
+    }
 
     switchModeHandler = (status) => {
 		if (status === 'new') {
@@ -78,7 +97,12 @@ export default class App extends Component {
 				errorMessage: 'Switch to Admin Login.'
 			})
 			return;
-		}
+        } else if (password !== codes[0] && !password !== codes[1] && !password !== codes[2]) {
+            this.setState({
+				errorMessage: 'ID Code is wrong!'
+            })
+            return;
+        }
 
         let requestBody = {
             query: `
@@ -207,6 +231,7 @@ export default class App extends Component {
             success: false,
             page: 'login',
             username: null,
+            loggedIn: false,
         });
 	}
 
@@ -220,9 +245,20 @@ export default class App extends Component {
 
 					// Actions
 					login={this.login}
-					logout={this.logout}
+                    logout={this.logout}
+                    onHomeHandler={this.onHomeHandler}
 				/>
 				<main className="main-content">
+                    {this.state.page === 'home' && !this.state.loggedIn &&
+                        <div className="begin__container">
+                            <button
+                                className="begin__btn"
+                                onClick={this.onBeginHandler}
+                            >
+                                Begin Registration
+                            </button>
+                        </div>
+                    }
 					{this.state.page === 'login' && !this.state.token
 					? <LoginPage
 						// State
@@ -255,15 +291,9 @@ export default class App extends Component {
                         <FormPage
                             token={this.state.token}
                             userId={this.state.userId}
-                            username={this.state.username}
                         />
                     ) : null}
-                    <div className="form-header-container">
-                        <h1 className="main-header-small">
-                            Information about the Shoot
-                        </h1>
-                    </div>
-                    <Info />
+                    {(this.state.page === 'home' || this.state.page === 'form') && <Info />}
 				</main>
 			</React.Fragment>
 		);

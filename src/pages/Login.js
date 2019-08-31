@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import './Login.css';
 
-
 export default class Home extends Component {
     render() {
         return (
@@ -13,13 +12,12 @@ export default class Home extends Component {
                     </h1>
                 </div>
                 <form className="auth-form" onSubmit={this.props.login}>
-                    
                     <div className="main-control">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" id="username" ref={this.props.usernameEl} />
+                        <label htmlFor="username">Email</label>
+                        <input type="email" id="username" ref={this.props.usernameEl} />
                     </div>
                     <div className="main-control">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Identification Code</label>
                         <input type="password" id="password" ref={this.props.passwordEl} />
                     </div>
                     <br/>

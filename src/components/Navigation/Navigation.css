@@ -16,6 +16,7 @@
 
 .main-navigation__image {
     width: 10rem;
+    cursor: pointer;
 }
 
 .main-navigation__logo h1 {

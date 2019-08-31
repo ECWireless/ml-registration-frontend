@@ -125,34 +125,39 @@ export default class Form extends Component {
             return res.json();
         })
         .then(resData => {
-            const forms = resData.data.forms;
-            let userForm = []
+            if (resData.data !== null) {
+                const forms = resData.data.forms;
+                let userForm = []
 
-            function filterForms(arr, arr2) {
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].creator._id === arr2) {
-                        userForm.push(arr[i]);
+                function filterForms(arr, arr2) {
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].creator._id === arr2) {
+                            userForm.push(arr[i]);
+                        }
                     }
                 }
-            }
-                
-            filterForms(forms, this.state.userId);
-
-            if (userForm.length !== 0) {
-                this.setState({
-                    userForm: userForm,
-                    canCreate: false,
-                    username: userForm[0].creator.username,
-                    name: userForm[0].name,
-                    phoneNumber: userForm[0].phoneNumber,
-                    email: userForm[0].email
-                });
+                    
+                filterForms(forms, this.state.userId);
+    
+                if (userForm.length !== 0) {
+                    this.setState({
+                        userForm: userForm,
+                        canCreate: false,
+                        username: userForm[0].creator.username,
+                        name: userForm[0].name,
+                        phoneNumber: userForm[0].phoneNumber,
+                        email: userForm[0].email
+                    });
+                } else {
+                    this.setState({
+                        canCreate: true,
+                    });
+                }
             } else {
                 this.setState({
                     canCreate: true,
                 });
-            }
-            
+            } 
         })
         .catch(err => {
             console.log(err);
@@ -181,24 +186,24 @@ export default class Form extends Component {
                             onConfirm={this.modalConfirmHandler}
                         >
                             <form>
-                                <div className="login-control">
+                                <div className="main-control">
                                     <label htmlFor="name">Name</label>
                                     <input type="text" id="name" ref={this.nameElRef} />
                                 </div>
-                                <div className="login-control">
+                                <div className="main-control">
                                     <label htmlFor="phoneNumber">Phone Number</label>
                                     <input type="tel" id="phoneNumber" ref={this.phoneNumberElRef} />
                                 </div>
-                                <div className="login-control">
+                                <div className="main-control">
                                     <label htmlFor="email">Email</label>
-                                    <input type="email" id="email" ref={this.emailElRef} />
+                                    <input value={this.props.username} type="email" id="email" ref={this.emailElRef} />
                                 </div>
                             </form>
                         </Modal>
                     )}
                     <div className="form-control">
                         <p>Please fill out the form to complete registration.</p>
-                        <button className="btn" onClick={this.createFormHandler}>Begin Registration</button>
+                        <button className="btn" onClick={this.createFormHandler}>Open Form</button>
                     </div>
                 </React.Fragment>
             )

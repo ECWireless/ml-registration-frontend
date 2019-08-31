@@ -7,7 +7,7 @@ export default function Form(props) {
         <React.Fragment>
             <div className="form-header-container">
                 <h1 className="main-header">
-                    {props.username}'s Registration
+                    {props.name}'s Registration
                 </h1>
             </div>
             <div className="form__list">

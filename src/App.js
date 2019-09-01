@@ -24,8 +24,8 @@ export default class App extends Component {
 		page: 'home',
 
 		isLoginSwitcher: true,
-		errorMessage: null,
-		success: false,
+		errorMessage: '',
+		successColor: false,
 
 		loggedIn: false,
 		token: null,
@@ -66,6 +66,7 @@ export default class App extends Component {
 			this.setState(prevState => {
 				return {isLoginSwitcher: !prevState.isLoginSwitcher };
 			})
+			this.login();
 		} else if (status === 'login') {
 			this.setState({page: 'login'})
 		} else {
@@ -80,8 +81,10 @@ export default class App extends Component {
 	}
 
     login = (event) => {
-        event.preventDefault();
-
+		if (event !== undefined) {
+			event.preventDefault();
+		}
+		
         const username = this.usernameEl.current.value;
 		const password = this.passwordEl.current.value;
 
@@ -158,8 +161,8 @@ export default class App extends Component {
                     userId: resData.data.login.userId,
                 })
 			} else if (resData.data.createUser.username === username) {
-				this.setState({ success: true, errorMessage: 'You have created a new account! Click "Login".' })
-				this.switchModeHandler('new');
+				this.setState({ isLoginSwitcher: true, successColor: true, errorMessage: 'You have created a new account! Click "Login".' })
+				this.login();
 			}
         })
         .catch(err => {
@@ -228,7 +231,7 @@ export default class App extends Component {
         this.setState({
             token: null,
             errorMessage: null,
-            success: false,
+            successColor: false,
             page: 'login',
             username: null,
             loggedIn: false,
@@ -266,7 +269,7 @@ export default class App extends Component {
 						errorMessage={this.state.errorMessage}
 						usernameEl={this.usernameEl}
 						passwordEl={this.passwordEl}
-						success={this.state.success}
+						successColor={this.state.successColor}
 						adminSwitch={this.adminSwitch}
 
 						// Actions

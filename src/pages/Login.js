@@ -41,7 +41,7 @@ export default class Home extends Component {
                         </button>
 
                     </div>
-                    <p className={this.props.success ? "login-warning-succes" : "login-warning"}>{this.props.errorMessage}</p>
+                    <p className={this.props.successColor ? "login-warning-succes" : "login-warning"}>{this.props.errorMessage}</p>
                 </form>
             </React.Fragment>
         )

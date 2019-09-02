@@ -5,7 +5,6 @@ import './Login.css';
 
 export default class Home extends Component {
     render() {
-        console.log(this.props.success)
         return (
             <React.Fragment>
                 <h1 className="main-header">
@@ -31,7 +30,7 @@ export default class Home extends Component {
                     >
                         Take me to User Login
                     </button>
-                    <p className={this.props.success ? "form-warning-succes" : "form-warning"}>{this.props.errorMessage}</p>
+                    <p className={this.props.successColor ? "login-warning-succes" : "login-warning"}>{this.props.errorMessage}</p>
                 </form>
             </React.Fragment>
         )

@@ -23,7 +23,7 @@ export default class App extends Component {
 	state = {
 		page: 'home',
 
-		isLoginSwitcher: true,
+		isLoginSwitcher: false,
 		errorMessage: '',
 		successColor: false,
 
@@ -157,7 +157,8 @@ export default class App extends Component {
                 localStorage.setItem('userId', resData.data.login.userId);
 				this.setState({
                     token: resData.data.login.token,
-                    loggedIn: true, page: 'form',
+                    loggedIn: true,
+                    page: 'form',
                     userId: resData.data.login.userId,
                 })
 			} else if (resData.data.createUser.username === username) {
@@ -210,13 +211,17 @@ export default class App extends Component {
             if (resData.errors) {
                 this.setState({
                     ...this.state.errorMessage,
-                    errorMessage: resData.errors[0].message
+                    errorMessage: resData.errors[0].message,
+                    successColor: false,
                 })
             } else if (resData.data.login) {
-				localStorage.setItem('myToken', resData.data.login.token);
+                localStorage.setItem('myToken', resData.data.login.token);
+                localStorage.setItem('userId', resData.data.login.userId);
 				this.setState({
                     token: resData.data.login.token,
-                    loggedIn: true, page: 'form',
+                    loggedIn: true,
+                    page: 'form',
+                    successColor: true,
                 })
 			}
         })
@@ -282,7 +287,8 @@ export default class App extends Component {
 							// State
 							errorMessage={this.state.errorMessage}
 							usernameEl={this.usernameEl}
-							passwordEl={this.passwordEl}
+                            passwordEl={this.passwordEl}
+                            successColor={this.state.successColor}
 
 							// Actions
 							adminLogin={this.adminLogin}
@@ -296,7 +302,18 @@ export default class App extends Component {
                             userId={this.state.userId}
                         />
                     ) : null}
-                    {(this.state.page === 'home' || this.state.page === 'form') && <Info />}
+                    { this.state.page === 'home' && <Info /> }
+
+                    {this.state.page === 'home' && !this.state.loggedIn &&
+                        <div className="begin__container">
+                            <button
+                                className="begin__btn"
+                                onClick={this.onBeginHandler}
+                            >
+                                Begin Registration
+                            </button>
+                        </div>
+                    }
 				</main>
 			</React.Fragment>
 		);

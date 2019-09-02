@@ -14,9 +14,7 @@ import Info from './components/Info/Info';
 const serverUrl = 'https://ml-registration-server.herokuapp.com/';
 
 const codes = [
-    "P4Mth'25rQyB",
-    "ogGM_pzr3ybW",
-    "Gd+CsYxn8_PE"
+    "P4Mth'25rQyB"
 ];
 
 export default class App extends Component {

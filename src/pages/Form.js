@@ -41,7 +41,6 @@ export default class Form extends Component {
         this.nameElRef = React.createRef();
         this.phoneNumberElRef = React.createRef();
         this.emailElRef = React.createRef();
-        this.handleLocationChange = this.handleLocationChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
         this.handleTimeChange = this.handleTimeChange.bind(this);
     }
@@ -196,10 +195,6 @@ export default class Form extends Component {
         });
     }
 
-    handleLocationChange(event) {
-        this.setState({locationValue: event.target.value});
-    }
-
     handleDayChange(event) {
         this.setState({dayValue: event.target.value});
     }
@@ -237,13 +232,6 @@ export default class Form extends Component {
                                     <input type="email" id="email" ref={this.emailElRef} />
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="location">Shoot Location:</label>
-                                    <select value={this.state.locationValue} onChange={this.handleLocationChange}>
-                                        <option value="Pittsburgh , PA">Pittsburgh, PA</option>
-                                        <option value="Princeton, NJ">Princeton, NJ</option>
-                                    </select>
-                                </div>
-                                <div className="main-control">
                                     <label htmlFor="location">Pick a Day to Film:</label>
                                     <select value={this.state.dayValue} onChange={this.handleDayChange}>
                                         <option value="Monday">Monday</option>
@@ -264,12 +252,12 @@ export default class Form extends Component {
 
                                 <div className="main-control">
                                     <label htmlFor="headshot">Upload Headshot:</label>
-                                    <button className="button-switch">Upload</button>
+                                    <div className="button-switch" style={{width: '3.5rem'}}>Upload</div>
                                 </div>
 
                                 <div className="main-control">
                                     <label htmlFor="headshot">Upload Script:</label>
-                                    <button className="button-switch">Upload</button>
+                                    <div className="button-switch" style={{width: '3.5rem'}}>Upload</div>
                                 </div>
                             </form>
                         </Modal>

@@ -43,7 +43,7 @@ export default function Info() {
 
                     <h4>On camera:</h4>
 
-                    <p>Your approved script will be teleprompted. Just relax, remember to smile, and most importantly… be yourself! Do not expect to get it on the first take. Most people take several tries and each time you will find yourself delivering the lines more naturally. You will have a full hour to get your best take. Once you get your best take, you will be asked to review, approve and sign off on which take you prefer the best. Refunds will not be issued after that point.  It is important that you sign off only if you are sure you will approve the video as re-shoot fees can be as costly as $8,000 depending on your location.</p>
+                    <p>Your approved script will be teleprompted. Just relax, remember to smile, and most importantly… be yourself! Do not expect to get it on the first take. Most people take several tries and each time you will find yourself delivering the lines more naturally. You will have a full hour to get your best take. Once you get your best take, you will be asked to review, approve and sign off on which take you prefer the best. Refunds will not be issued after that point.  It is important that you sign off only if you are sure you will approve the video as re-shoot fees can be as costly as $5,300 depending on your location.</p>
                     
                     <h4>Review process:</h4>
 

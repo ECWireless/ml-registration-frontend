@@ -27,6 +27,8 @@ export default class Form extends Component {
         email: '',
 
         adminLogin: false,
+
+        value: 'pittsburgh'
     }
 
     constructor(props) {
@@ -59,10 +61,13 @@ export default class Form extends Component {
         const requestBody = {
             query: `
                 mutation {
-                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}", creator: "${this.props.userId}"}) {
+                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}", location: "", day: "", time: "", creator: "${this.props.userId}"}) {
                         name
                         phoneNumber
                         email
+                        location
+                        day
+                        time
                         creator {
                             _id
                             username
@@ -174,6 +179,10 @@ export default class Form extends Component {
         });
     }
 
+    handleLocationChange(event) {
+        this.setState({value: event.target.value});
+    }
+
     render() {
         let content = null;
 
@@ -199,7 +208,23 @@ export default class Form extends Component {
                                 </div>
                                 <div className="main-control">
                                     <label htmlFor="email">Email</label>
-                                    <input value={this.props.username} type="email" id="email" ref={this.emailElRef} />
+                                    <input type="email" id="email" ref={this.emailElRef} />
+                                </div>
+                                <div className="main-control">
+                                    <label htmlFor="location">Shoot Location</label>
+                                    <select value={this.state.value} onChange={this.handleLocationChange}>
+                                        <option value="pittsburgh">Pittsburgh</option>
+                                        <option value="newYork">New York</option>
+                                        <option value="california">California</option>
+                                    </select>
+                                </div>
+                                <div className="main-control">
+                                    <label htmlFor="email">Day</label>
+                                    <input type="email" id="text" ref={this.dayElRef} />
+                                </div>
+                                <div className="main-control">
+                                    <label htmlFor="email">Time</label>
+                                    <input type="email" id="text" ref={this.timeElRef} />
                                 </div>
                             </form>
                         </Modal>

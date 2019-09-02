@@ -23,7 +23,7 @@ export default function Model(props) {
                         className="btn"
                         onClick={props.onConfirm}
                     >
-                        Register
+                        Complete
                     </button>
                 )}
             </section>

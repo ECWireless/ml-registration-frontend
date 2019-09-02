@@ -8,7 +8,7 @@ export default class Home extends Component {
             <React.Fragment>
                 <div className="form-header-container">
                     <h1 className="main-header">
-                        {this.props.isLoginSwitcher ? 'Login' : 'Create Account'} to Register
+                        {this.props.isLoginSwitcher ? 'Login to Submit Info' : 'Register New Account'}
                     </h1>
                 </div>
                 <form className="auth-form" onSubmit={this.props.login}>
@@ -23,14 +23,8 @@ export default class Home extends Component {
                     <br/>
                     <div className="main-actions">
                         {this.props.isLoginSwitcher
-                        ?<React.Fragment>
-                            <button className="button-switch" type="button" onClick={this.props.switchModeHandler}>Create New Account</button>
-                            <button className="button-main" type="submit" onClick={this.props.login}>Login</button>
-                        </React.Fragment>
-                        :<React.Fragment>
-                            <button className="button-switch" type="button" onClick={this.props.switchModeHandler}>Switch to Login</button>
-                            <button className="button-main" type="submit">Create</button>
-                        </React.Fragment>}
+                        ? <button className="button-main" type="submit" onClick={this.props.login}>Login</button>
+                        : <button className="button-main" type="submit">Register</button>}
                         <br/>
                         <button
                             className="button-admin"
@@ -39,7 +33,10 @@ export default class Home extends Component {
                         >
                             Take me to Admin Login
                         </button>
-
+                        {!this.props.isLoginSwitcher
+                        ? <button style={{marginLeft: '1rem'}} className="button-admin" type="button" onClick={this.props.switchModeHandler}>Switch to Login</button>
+                        : <button style={{marginLeft: '1rem'}} className="button-admin" type="button" onClick={this.props.switchModeHandler}>Create New Account</button>
+                        }
                     </div>
                     <p className={this.props.successColor ? "login-warning-succes" : "login-warning"}>{this.props.errorMessage}</p>
                 </form>

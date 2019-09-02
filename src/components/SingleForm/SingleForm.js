@@ -28,6 +28,34 @@ export default function Form(props) {
                         <p className="form__list-paragraph">{props.email}</p>
                     </div>
                 </div>
+
+                <br />
+                <h2 className="form__shoot-header">Shoot Details:</h2>
+                <div className="form__shoot-container">
+                    <div className="form__contact-items">
+                        <h4 className="form__list-header">Location:</h4>
+                        <p className="form__list-paragraph">{props.location}</p> 
+                    </div>
+
+                    <div className="form__contact-items">
+                        <h4 className="form__list-header">Day & Time:</h4>
+                        <p className="form__list-paragraph">{props.day} at {props.time}</p> 
+                    </div>
+                </div>
+
+                <br />
+                <h2 className="form__upload-header">{props.name}'s Uploads:</h2>
+                <div className="form__shoot-container">
+                    <div className="form__contact-items">
+                        <h4 className="form__list-header">Headshot:</h4>
+                        <p>(Headshot will go here.)</p> 
+                    </div>
+
+                    <div className="form__contact-items">
+                        <h4 className="form__list-header">Script:</h4>
+                        <p>(Script will go here.)</p> 
+                    </div>
+                </div>
             </div>
         </React.Fragment>
     )

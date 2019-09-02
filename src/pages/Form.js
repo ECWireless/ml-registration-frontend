@@ -25,10 +25,15 @@ export default class Form extends Component {
         name: '',
         phoneNumber: '',
         email: '',
+        location: '',
+        day: '',
+        time: '',
 
         adminLogin: false,
 
-        value: 'pittsburgh'
+        locationValue: 'Pittsburgh, PA',
+        dayValue: 'Monday',
+        timeValue: '1:00 PM'
     }
 
     constructor(props) {
@@ -36,6 +41,9 @@ export default class Form extends Component {
         this.nameElRef = React.createRef();
         this.phoneNumberElRef = React.createRef();
         this.emailElRef = React.createRef();
+        this.handleLocationChange = this.handleLocationChange.bind(this);
+        this.handleDayChange = this.handleDayChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
     }
 
     UNSAFE_componentWillMount() {
@@ -53,6 +61,9 @@ export default class Form extends Component {
         const name = this.nameElRef.current.value;
         const phoneNumber = this.phoneNumberElRef.current.value;
         const email = this.emailElRef.current.value;
+        const location = this.state.locationValue;
+        const day = this.state.dayValue;
+        const time = this.state.timeValue;
 
         if (name.trim().length === 0 || phoneNumber.trim().length === 0 || email.trim().length === 0) {
             return;
@@ -61,7 +72,7 @@ export default class Form extends Component {
         const requestBody = {
             query: `
                 mutation {
-                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}", location: "", day: "", time: "", creator: "${this.props.userId}"}) {
+                    createForm(formInput: {name: "${name}", phoneNumber: "${phoneNumber}", email: "${email}", location: "${location}", day: "${day}", time: "${time}", creator: "${this.props.userId}"}) {
                         name
                         phoneNumber
                         email
@@ -112,6 +123,9 @@ export default class Form extends Component {
                         name
                         phoneNumber
                         email
+                        location
+                        day
+                        time
                         creator {
                             _id
                             username
@@ -158,7 +172,10 @@ export default class Form extends Component {
                             username: userForm[0].creator.username,
                             name: userForm[0].name,
                             phoneNumber: userForm[0].phoneNumber,
-                            email: userForm[0].email
+                            email: userForm[0].email,
+                            location: userForm[0].location,
+                            day: userForm[0].day,
+                            time: userForm[0].time,
                         });
                     } else {
                         this.setState({
@@ -180,10 +197,19 @@ export default class Form extends Component {
     }
 
     handleLocationChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({locationValue: event.target.value});
+    }
+
+    handleDayChange(event) {
+        this.setState({dayValue: event.target.value});
+    }
+
+    handleTimeChange(event) {
+        this.setState({timeValue: event.target.value});
     }
 
     render() {
+        console.log(this.state.timeValue)
         let content = null;
 
         if (this.state.canCreate) {
@@ -199,32 +225,51 @@ export default class Form extends Component {
                         >
                             <form>
                                 <div className="main-control">
-                                    <label htmlFor="name">Name</label>
+                                    <label htmlFor="name">Name:</label>
                                     <input type="text" id="name" ref={this.nameElRef} />
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="phoneNumber">Phone Number</label>
+                                    <label htmlFor="phoneNumber">Phone Number:</label>
                                     <input type="tel" id="phoneNumber" ref={this.phoneNumberElRef} />
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="email">Email</label>
+                                    <label htmlFor="email">Email:</label>
                                     <input type="email" id="email" ref={this.emailElRef} />
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="location">Shoot Location</label>
-                                    <select value={this.state.value} onChange={this.handleLocationChange}>
-                                        <option value="pittsburgh">Pittsburgh</option>
-                                        <option value="newYork">New York</option>
-                                        <option value="california">California</option>
+                                    <label htmlFor="location">Shoot Location:</label>
+                                    <select value={this.state.locationValue} onChange={this.handleLocationChange}>
+                                        <option value="Pittsburgh , PA">Pittsburgh, PA</option>
+                                        <option value="Princeton, NJ">Princeton, NJ</option>
                                     </select>
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="email">Day</label>
-                                    <input type="email" id="text" ref={this.dayElRef} />
+                                    <label htmlFor="location">Pick a Day to Film:</label>
+                                    <select value={this.state.dayValue} onChange={this.handleDayChange}>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                    </select>
                                 </div>
                                 <div className="main-control">
-                                    <label htmlFor="email">Time</label>
-                                    <input type="email" id="text" ref={this.timeElRef} />
+                                    <label htmlFor="location">Pick a Time to Film:</label>
+                                    <select value={this.state.timeValue} onChange={this.handleTimeChange}>
+                                        <option value="1:00 PM">1:00 PM</option>
+                                        <option value="2:00 PM">2:00 PM</option>
+                                        <option value="3:00 PM">3:00 PM</option>
+                                    </select>
+                                </div>
+
+                                <div className="main-control">
+                                    <label htmlFor="headshot">Upload Headshot:</label>
+                                    <button className="button-switch">Upload</button>
+                                </div>
+
+                                <div className="main-control">
+                                    <label htmlFor="headshot">Upload Script:</label>
+                                    <button className="button-switch">Upload</button>
                                 </div>
                             </form>
                         </Modal>
@@ -247,6 +292,9 @@ export default class Form extends Component {
                         name={this.state.name}
                         phoneNumber={this.state.phoneNumber}
                         email={this.state.email}
+                        location={this.state.location}
+                        day={this.state.day}
+                        time={this.state.time}
                         adminLogin={this.state.adminLogin}
                     />
                     <Info />

@@ -22,6 +22,9 @@ export default class AdminForms extends Component {
                         name
                         phoneNumber
                         email
+                        location
+                        day
+                        time
                         creator {
                             _id
                             username
@@ -72,6 +75,34 @@ export default class AdminForms extends Component {
                         <div className="form__contact-items">
                             <h4 className="form__list-header">Email:</h4>
                             <p className="form__list-paragraph">{form.email}</p>
+                        </div>
+                    </div>
+
+                    <br />
+                    <h2 className="form__shoot-header">Shoot Details:</h2>
+                    <div className="form__shoot-container">
+                        <div className="form__contact-items">
+                            <h4 className="form__list-header">Location:</h4>
+                            <p className="form__list-paragraph">{form.location}</p> 
+                        </div>
+
+                        <div className="form__contact-items">
+                            <h4 className="form__list-header">Day & Time:</h4>
+                            <p className="form__list-paragraph">{form.day} at {form.time}</p> 
+                        </div>
+                    </div>
+
+                    <br />
+                    <h2 className="form__upload-header">{form.name}'s Uploads:</h2>
+                    <div className="form__shoot-container">
+                        <div className="form__contact-items">
+                            <h4 className="form__list-header">Headshot:</h4>
+                            <p>(Headshot will go here.)</p> 
+                        </div>
+
+                        <div className="form__contact-items">
+                            <h4 className="form__list-header">Script:</h4>
+                            <p>(Script will go here.)</p> 
                         </div>
                     </div>
                 </li>

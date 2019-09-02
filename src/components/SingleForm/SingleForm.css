@@ -20,3 +20,24 @@
     display: flex;
     justify-content: space-between;
 }
+
+.form__shoot-header {
+    color: #009cde;
+    border-bottom: 1px solid #a2a2a2;
+    padding-bottom: .5rem;
+    width: 12rem;
+    text-align: left;
+}
+
+.form__shoot-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.form__upload-header {
+    color: #009cde;
+    border-bottom: 1px solid #a2a2a2;
+    padding-bottom: .5rem;
+    width: 20rem;
+    text-align: left;
+}

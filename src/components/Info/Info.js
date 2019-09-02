@@ -84,7 +84,7 @@ export default function Info() {
 
                     <h4>Re-shoots:</h4>
                     
-                    <p>Re-shoots must be coordinated by contacting us using the form below.   Re-shoots should be a used only as a last resort as they can be as costly as $8,000 depending on the location.</p>
+                    <p>Re-shoots must be coordinated by contacting us using the form below.   Re-shoots should be a used only as a last resort as they can be as costly as $5,300 depending on the location.</p>
                 </div>
             </div>
         </React.Fragment>
